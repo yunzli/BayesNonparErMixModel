@@ -1,0 +1,19 @@
+save_path = "enter the folder path where you want to save data" 
+data_path = "enter the folder path where the data is stored"
+fig_path = "enter the folder path where you want to save figures" 
+datafile = "*.jld2"
+nbatch = 5000
+[hyper]
+a_alpha = 1.0 # Float 
+b_alpha = 1.0 # Float 
+M_C1 = 1000 # Int 
+M_C2 = 3000 # Int 
+M_T1 = 1000 # Int 
+M_T2 = 3000 # Int 
+a_C = 2.0 # Float
+b_C = 50.0 # Float 
+a_T = 2.0 # Float 
+b_T = 50.0 # Float 
+mu0 = [5.0, 5.5] # Vector 
+Sigma0 = [[10.0,0],[0,10.0]] # Vector[Vector]
+Sigma = [[10.0,0],[0,10.0]] # Vector[Vector]
