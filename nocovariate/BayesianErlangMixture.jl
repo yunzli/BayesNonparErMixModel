@@ -1,8 +1,13 @@
 module BayesErMixModel 
 
-using JLD2, ProgressBars, TOML
-using Random, StatsBase, LinearAlgebra, Distributions
+using Distributions
+using JLD2
+using LinearAlgebra
+using ProgressBars
 using RCall
+using Random
+using StatsBase
+using TOML
 
 Random.seed!(20220901)
 

@@ -11,19 +11,33 @@ function preprocessor(dat)
 	survivalC = dat["survival"][indC]
 	survivalT = dat["survival"][indT]
 
-	result = Dict(
-				  "indexC" => indC, 
-				  "indexT" => indT, 
-				  "survivalC" => survivalC, 
-				  "survivalT" => survivalT, 
-				  "survival" => dat["survival"], 
-				  "nuC" => nuC, 
-				  "nuT" => nuT,
-				  "nu" => dat["nu"],
-				  "modelC" => dat["modelC"],
-				  "modelT" => dat["modelT"],
-				  "group" => dat["group"]
-				 )
+	if haskey(dat, "modelC")
+		result = Dict(
+					  "indexC" => indC, 
+					  "indexT" => indT, 
+					  "survivalC" => survivalC, 
+					  "survivalT" => survivalT, 
+					  "survival" => dat["survival"], 
+					  "nuC" => nuC, 
+					  "nuT" => nuT,
+					  "nu" => dat["nu"],
+					  "modelC" => dat["modelC"],
+					  "modelT" => dat["modelT"],
+					  "group" => dat["group"]
+					 )
+	else
+		result = Dict(
+					  "indexC" => indC, 
+					  "indexT" => indT, 
+					  "survivalC" => survivalC, 
+					  "survivalT" => survivalT, 
+					  "survival" => dat["survival"], 
+					  "nuC" => nuC, 
+					  "nuT" => nuT,
+					  "nu" => dat["nu"],
+					  "group" => dat["group"]
+					 )
+	end
     
 	return result 
 end 

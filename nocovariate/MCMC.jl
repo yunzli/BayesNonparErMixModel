@@ -9,7 +9,7 @@ function MCMC(config_file)
 	cur = Dict("zeta"=> rand(InverseGamma(hyper["a_zeta"], hyper["b_zeta"]),1)[1],
 			   "M" => sample([ceil(Int32,hyper["M1"]/(hyper["a_theta"]*hyper["b_theta"])):1:ceil(Int32, hyper["M2"]/(hyper["a_theta"]*hyper["b_theta"]));]),
 			   "alpha" => 2,
-			   "phi" => rand(Exponential(5),n),
+			   "phi" => rand(Exponential(hyper["b_theta"]/(hyper["a_theta"]-1)),n),
 			   "theta" => rand(Gamma(hyper["a_theta"], hyper["b_theta"]),1)[1]
 			   )
 
@@ -49,7 +49,7 @@ function MCMC(config_file)
 		acc = count / batch_size
 		delta_n = minimum([0.01, n_b^(-0.5)])
 
-		if acc <= 0.44
+		if acc <= 0.234 # 0.44
 			l_rate -= delta_n
 		else
 			l_rate += delta_n

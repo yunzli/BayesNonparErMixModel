@@ -59,15 +59,37 @@ function update_phis(cur, dat, hyper)
 		end
 
 		_phi_cur = phi_cur[:,1:end .!= i] # 2 x (n-1)
-		qvec = zeros(n-1)
 		intervals = [theta_i:theta_i:(M_i-1)*theta_i;]
+
+		#  qvec = zeros(n-1)
+		qcollect = Dict() 
 		for j in 1:(n-1)
-			mj = findInterval(_phi_cur[xi,j], intervals) 
-			if nu[i] == 1
-				qvec[j] = pdf(Gamma(mj, theta_i), survivals[i])
+			if haskey(qcollect, _phi_cur[:,j])
+				qcollect[_phi_cur[:,j]] += 1
 			else
-				qvec[j] = ccdf(Gamma(mj, theta_i), survivals[i])
+				qcollect[_phi_cur[:,j]] = 1
 			end
+		end
+		size = length(qcollect)
+		
+		_phi_star = zeros(2, size) # collect(keys(qcollect)) 
+		_n = zeros(size)
+		count = 1
+		for (key, value) in qcollect
+			_phi_star[:, count] = key
+			_n[count] = value 
+			count += 1
+		end
+
+		qvec = zeros(size) 
+		for j in 1:size
+			mj = findInterval(_phi_star[xi,j], intervals) 
+			if nu[i] == 1
+				qj = pdf(Gamma(mj, theta_i), survivals[i])
+			else
+				qj = ccdf(Gamma(mj, theta_i), survivals[i])
+			end
+			qvec[j] = qcollect[_phi_star[:,j]] * qj 
 		end
 
 		u = rand(Uniform(0, alpha*q0 + sum(qvec)), 1)[1]
@@ -94,8 +116,10 @@ function update_phis(cur, dat, hyper)
 			phi_cur[_xi,i] = _phi_xi
 
 		else
-			idx = sample([1:1:(n-1);], Weights(qvec))
-			phi_cur[:,i] = _phi_cur[:,idx]
+			#  idx = sample([1:1:(n-1);], Weights(qvec))
+			#  phi_cur[:,i] = _phi_cur[:,idx]
+			idx = sample([1:1:size;], Weights(qvec))
+			phi_cur[:,i] = _phi_star[:,idx]
 		end
 	end
 
